@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="~{fragments/layout :: head(${product.name + ' | OMEAX'})}"></th:block>
+<script type="application/ld+json" th:inline="javascript">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": /*[[${product.name}]]*/"",
+  "url": /*[[${canonicalUrl}]]*/"",
+  "image": /*[[${#strings.startsWith(product.image, 'http') ? product.image : 'https://www.omeax.vn' + product.image}]]*/""
+}
+</script>
+<script type="application/ld+json" th:inline="javascript">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.omeax.vn/" },
+    { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.omeax.vn/products" },
+    { "@type": "ListItem", "position": 3, "name": /*[[${product.name}]]*/"", "item": /*[[${canonicalUrl}]]*/"" }
+  ]
+}
+</script>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main id="main">
+
+<section class="crumb">
+  <div class="container">
+    <a href="/">Home</a><span class="sep">/</span>
+    <a href="/products">Products</a><span class="sep">/</span>
+    <span class="crumb-current" th:text="${product.name}">Product</span>
+  </div>
+</section>
+
+<section class="section-pad-3 section-pb-5">
+  <div class="container">
+    <div class="detail-hero">
+      <!-- Left column: artwork and datasheets -->
+      <div class="detail-media">
+        <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}" fetchpriority="high" decoding="async"/></div>
+        <div class="spec-card" th:if="${not #lists.isEmpty(product.documentsList)}">
+          <h2>Documents</h2>
+          <ul class="doc-list">
+            <li th:each="d : ${product.documentsList}">
+              <a th:href="${d.url}" th:text="${d.label}" target="_blank" rel="noopener">datasheet</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Right column: name, applications, specifications -->
+      <div>
+        <h1 th:text="${product.name}">Name</h1>
+        <div class="tags" th:if="${not #lists.isEmpty(product.applicationsList)}">
+          <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
+        </div>
+        <div class="spec-card mt-2">
+          <h2>Technical Specs</h2>
+          <div th:if="${not #lists.isEmpty(product.specsList)}" class="spec-table">
+            <th:block th:each="s : ${product.specsList}">
+              <div class="lbl" th:text="${s.label}">label</div>
+              <div class="val" th:text="${s.value}">value</div>
+            </th:block>
+          </div>
+          <p th:if="${#lists.isEmpty(product.specsList)}" class="pd-nospec">Contact us for detailed specifications tailored to your project.</p>
+          <a href="/contact" class="btn btn-primary btn-mt">Contact Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-2">
+      <a href="/products" class="text-navy-bold">← Back to products</a>
+    </div>
+  </div>
+</section>
+
+</main>
+<div th:replace="~{fragments/layout :: ticker-home}"></div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

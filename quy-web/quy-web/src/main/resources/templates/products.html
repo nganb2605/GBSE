@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="~{fragments/layout :: head('Products | OMEAX')}"></th:block>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.omeax.vn/" },
+    { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.omeax.vn/products" }
+  ]
+}
+</script>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main id="main">
+
+<section class="crumb">
+  <div class="container">
+    <a href="/">Home</a><span class="sep">/</span>
+    <span class="crumb-current" href="/products">Products</span>
+  </div>
+</section>
+
+<section class="section-search">
+  <div class="container">
+    <p class="search-prompt">What are you looking for?</p>
+    <div class="search-wrap">
+      <span class="search-icon"></span>
+      <input id="search" type="text" autocomplete="off" placeholder="Search products..."/>
+      <div id="suggestions" class="suggestions"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-ranges">
+  <div class="container">
+    <div class="cat-layout">
+
+      <!-- Sticky range index -->
+      <nav class="cat-index" aria-label="Product ranges">
+        <p class="cat-index-title">Ranges</p>
+        <a th:each="r,it : ${ranges}" th:href="|#range-${r.id}|" class="cat-index-link" th:data-range="${r.id}">
+          <span class="n" th:text="${it.count}">1</span>
+          <span th:text="${r.brand}">Brand</span>
+        </a>
+      </nav>
+
+      <div class="range-list">
+      <div class="range open" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
+        <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
+          <h3 th:data-n="${it.count}" th:text="${r.brand}">Brand</h3>
+          <span class="chevron"></span>
+        </button>
+        <div class="range-body">
+          <div class="subcat" th:each="c : ${r.categories}">
+            <h4 class="subcat-title" th:if="${c.name != null and !c.name.isBlank()}" th:text="${c.name}">Category</h4>
+            <div class="product-grid">
+              <a class="prod-card" th:each="p : ${c.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.category}">
+                <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}" loading="lazy" decoding="async"></div>
+                <div class="pbody">
+                  <h4 th:text="${p.name}">Name</h4>
+                  <p class="pshort" th:text="${p.shortText}">short</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+<script th:inline="javascript">
+  const ALL = /*[[${allProducts}]]*/ [];
+  const input = document.getElementById('search');
+  const sug = document.getElementById('suggestions');
+
+  function searchAll(q){
+    q = (q||'').trim().toLowerCase();
+    if(!q) return [];
+    return ALL.filter(p => (p.name + ' ' + p.shortText).toLowerCase().includes(q)).slice(0,6);
+  }
+
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  }
+
+  function renderSug(items){
+    if(!items.length){ sug.classList.remove('open'); sug.innerHTML=''; return; }
+    // All product data is inserted via esc() to prevent stored XSS.
+    // Never use template literals with untrusted data directly in innerHTML.
+    sug.innerHTML = items.map(p =>
+      '<a href="/products/' + p.id + '">'
+      + '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '"/>'
+      + '<div class="sug-text">'
+      + '<div class="name">' + esc(p.name) + '</div>'
+      + '<div class="short">' + esc(p.shortText) + '</div>'
+      + '</div>'
+      + '</a>'
+    ).join('');
+    sug.classList.add('open');
+  }
+
+  function filterCards(q){
+    q = (q||'').trim().toLowerCase();
+    document.querySelectorAll('.prod-card').forEach(c => {
+      const t = (c.dataset.name + ' ' + c.dataset.short).toLowerCase();
+      c.style.display = !q || t.includes(q) ? '' : 'none';
+    });
+    // Hide a child-category block once every card inside it is filtered out,
+    // so its heading never sits above an empty grid.
+    document.querySelectorAll('.subcat').forEach(s => {
+      const anyVisible = Array.from(s.querySelectorAll('.prod-card'))
+        .some(c => c.style.display !== 'none');
+      s.style.display = anyVisible ? '' : 'none';
+    });
+  }
+
+  input.addEventListener('input', e => { renderSug(searchAll(e.target.value)); filterCards(e.target.value); });
+  input.addEventListener('focus', e => renderSug(searchAll(e.target.value)));
+  input.addEventListener('blur', () => setTimeout(()=>sug.classList.remove('open'),150));
+</script>
+<script>
+  // Range index → open target range + smooth-scroll
+  document.querySelectorAll('.cat-index-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var id = link.getAttribute('href').slice(1);
+      var range = document.getElementById(id);
+      if (!range) return;
+      e.preventDefault();
+      range.classList.add('open');
+      range.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+<div th:replace="~{fragments/layout :: ticker-home}"></div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="~{fragments/layout :: head('News | OMEAX')}"></th:block>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.omeax.vn/" },
+    { "@type": "ListItem", "position": 2, "name": "News", "item": "https://www.omeax.vn/news" }
+  ]
+}
+</script>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main id="main">
+
+<section class="crumb">
+  <div class="container">
+    <a href="/">Home</a><span class="sep">/</span>
+    <span class="crumb-current">News</span>
+  </div>
+</section>
+
+<section class="section-pad-3">
+  <div class="container">
+    <div class="news-list">
+
+      <article class="news-item">
+        <div class="news-content">
+          <div class="news-tag-row">
+            <span class="news-tag">Company</span>
+            <span class="news-date">15/04/2026</span>
+          </div>
+          <h3 class="news-title">OMEAX opens new branch in Ho Chi Minh City</h3>
+          <p class="news-body">The HCMC branch is now fully operational, providing better service to customers in southern Vietnam.</p>
+          <a href="#" class="news-link">Read more →</a>
+        </div>
+        <div class="news-img">
+          <img src="/images/about_skyscraper.webp" alt="OMEAX HCMC branch" width="260" height="175" fetchpriority="high" decoding="async"/>
+        </div>
+      </article>
+
+      <article class="news-item">
+        <div class="news-content">
+          <div class="news-tag-row">
+            <span class="news-tag">New Product</span>
+            <span class="news-date">02/03/2026</span>
+          </div>
+          <h3 class="news-title">New-generation Grundfos pumps for HVAC applications</h3>
+          <p class="news-body">Higher efficiency, energy savings, and smart control integration designed for high-rise buildings.</p>
+          <a href="#" class="news-link">Read more →</a>
+        </div>
+        <div class="news-img">
+          <img src="/images/about_skyscraper.webp" alt="Grundfos pumps" width="260" height="175" loading="lazy" decoding="async"/>
+        </div>
+      </article>
+
+      <article class="news-item">
+        <div class="news-content">
+          <div class="news-tag-row">
+            <span class="news-tag">Market</span>
+            <span class="news-date">20/01/2026</span>
+          </div>
+          <h3 class="news-title">Energy efficiency trends in MEP systems 2026</h3>
+          <p class="news-body">An overview of PICV, VFD, and heat pump solutions gaining wide adoption across Vietnam.</p>
+          <a href="#" class="news-link">Read more →</a>
+        </div>
+        <div class="news-img">
+          <img src="/images/about_skyscraper.webp" alt="MEP energy efficiency" width="260" height="175" loading="lazy" decoding="async"/>
+        </div>
+      </article>
+
+    </div>
+    <p class="news-note">Content is updated regularly.</p>
+  </div>
+</section>
+
+</main>
+<div th:replace="~{fragments/layout :: ticker-home}"></div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

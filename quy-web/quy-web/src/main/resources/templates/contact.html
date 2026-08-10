@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <th:block th:replace="~{fragments/layout :: head('Contact | OMEAX')}"></th:block>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.omeax.vn/" },
+      { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://www.omeax.vn/contact" }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <div th:replace="~{fragments/layout :: navbar}"></div>
+  <main id="main">
+
+    <section class="crumb">
+      <div class="container">
+        <a href="/">Home</a><span class="sep">/</span>
+        <span class="crumb-current">Contact</span>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="container grid grid-2 contact-grid">
+
+        <!-- Company info -->
+        <div class="contact-info">
+          <h2 class="contact-company-name">OMEAX Joint Stock Company</h2>
+          <div class="contact-details">
+            <div class="contact-row">
+              <div>
+                <div class="contact-label">Hanoi – Operating address</div>
+                <div class="contact-value">Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div>
+                <div class="contact-label">HCMC branch</div>
+                <div class="contact-value">11B Hong Ha, Tan Binh, HCMC.</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div>
+                <div class="contact-label">Registered address</div>
+                <div class="contact-value">134A Giang Vo, Ba Dinh, Ha Noi.</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div>
+                <div class="contact-label">Contact</div>
+                <div class="contact-value">
+                  Email: info@omeax.com<br>
+                  Phone: +84 (0) 24 0000 0000
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact form -->
+        <form id="contactForm" th:action="@{/contact}" method="post" th:object="${contactForm}" novalidate>
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+          <!-- Honeypot — bots fill this, humans don't -->
+          <div class="is-hidden" aria-hidden="true">
+            <label for="website">Leave blank</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div th:if="${success}" class="alert alert-success" role="alert">
+            Your message has been sent. We will get back to you shortly.
+          </div>
+          <div th:if="${rateLimitError}" class="alert alert-error" role="alert">
+            Too many requests. Please wait a few minutes before trying again.
+          </div>
+
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" th:field="*{fullName}" autocomplete="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" th:field="*{phone}" autocomplete="tel" />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" autocomplete="email" />
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" th:field="*{message}"></textarea>
+          </div>
+
+          <div class="consent-block">
+            <div class="consent-row">
+              <input type="checkbox" id="consent" name="consent" />
+              <label for="consent">I agree to the processing and use of my personal data</label>
+            </div>
+
+
+            <span id="consentError" class="consent-error" role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full">Send message →</button>
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+  <div th:replace="~{fragments/layout :: ticker-home}"></div>
+  <div th:replace="~{fragments/layout :: footer}"></div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('contactForm');
+      var consent = document.getElementById('consent');
+      var errorSpan = document.getElementById('consentError');
+
+      form.addEventListener('submit', function (e) {
+        if (!consent.checked) {
+          e.preventDefault();
+          errorSpan.textContent = 'Please confirm your agreement before submitting.';
+        }
+      });
+
+      consent.addEventListener('change', function () {
+        if (this.checked) errorSpan.textContent = '';
+      });
+    })();
+  </script>
+</body>
+
+</html>

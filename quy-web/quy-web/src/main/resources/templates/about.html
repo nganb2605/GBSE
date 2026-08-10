@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="~{fragments/layout :: head('About | OMEAX')}"></th:block>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.omeax.vn/" },
+    { "@type": "ListItem", "position": 2, "name": "About", "item": "https://www.omeax.vn/about" }
+  ]
+}
+</script>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main id="main">
+
+<section class="page-header">
+  <div class="container">
+    <p class="eyebrow">Introduction</p>
+    <h1>About OMEAX</h1>
+    <p class="subtitle">Simplifies life</p>
+  </div>
+</section>
+
+<section class="crumb">
+  <div class="container">
+    <a href="/">Home</a><span class="sep">/</span>
+    <span class="crumb-current" href="/about">About</span>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="grid grid-2 grid-feature">
+      <div>
+        <p class="eyebrow">Introduction</p>
+        <h2 class="section-title">Our Group</h2>
+        <ul class="about-list">
+          <li>• <b>Omeax SARL</b> – Headquarter, France: Assembling &amp; warehouse</li>
+          <li>• <b>OMEAX Shanghai Flow Control Co., LTD</b>, China: Design and manufacture</li>
+          <li>• <b>Omeax Company Limited</b>, Hongkong</li>
+          <li>• <b>Omeax Hainan Trading Co., Ltd</b>, China</li>
+          <li>• <b>Omeax Entreprises</b>, Philippines</li>
+          <li>• <b>Omeax Joint Stock Company</b>, Vietnam</li>
+        </ul>
+      </div>
+      <img src="/images/about_skyscraper.webp" alt="Skyscrapers" fetchpriority="high" decoding="async" class="about-img"/>
+    </div>
+  </div>
+</section>
+
+<section class="bg-secondary">
+  <div class="container">
+    <h2 class="section-title text-center">OMEAX Vietnam</h2>
+    <div class="grid grid-2 about-info-grid">
+      <div class="info-card">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6l6-4 6 4v15M9 21v-6h6v6"/></svg></div>
+        <div><div class="lbl">Party name</div><div class="val">OMEAX JOINT STOCK COMPANY</div></div>
+      </div>
+      <div class="info-card">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="lbl">Registered address</div><div class="val">134A Giang Vo, Ba Dinh, Ha Noi.</div></div>
+      </div>
+      <div class="info-card">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="lbl">HANOI – Operating address</div><div class="val">Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</div></div>
+      </div>
+      <div class="info-card">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="lbl">HCMC branch</div><div class="val">11B Hong Ha, Tan Binh, HCMC.</div></div>
+      </div>
+      <div class="info-card">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div><div class="lbl">Registration number</div><div class="val">0110535209</div></div>
+      </div>
+      <div class="info-card">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div><div class="lbl">Established</div><div class="val">Nov 8th, 2023</div></div>
+      </div>
+      <div class="info-card">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div><div class="lbl">Employees</div><div class="val">15 employees</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="grid grid-2 grid-feature">
+      <img src="/images/about_skyscraper.webp" alt="Server room" loading="lazy" decoding="async" class="about-img"/>
+      <div>
+        <p class="eyebrow">Value Propositions</p>
+        <h2 class="section-title">More than 15 years of experience</h2>
+        <ul class="about-list">
+          <li>• Knowledge and experience in HVAC, WS application for Pumps, Heat pump, Drives, Valves, HEX, etc.</li>
+          <li>• Experience supplying hundreds of projects in North, South and Middle of Vietnam.</li>
+          <li>• Distribute many equipments in one system.</li>
+          <li>• After-sale service: technical support, warranty, upgrade and repair.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-secondary">
+  <div class="container">
+    <div class="grid grid-2">
+      <div class="spec-card"><h2>Sales Skills</h2><p class="spec-text">Ability to find new customers/opportunities and build up strong relationships with the Owner, Consultant, Designer and Contractors.</p></div>
+      <div class="spec-card"><h2>Technical Skills</h2><p class="spec-text">Provide solutions and supply equipment based on customer requirements: heating &amp; cooling, smart motor controlling, smart and remote reading measurement instruments. Pump, heat pump and Heat exchanger maintenance and service.</p></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<div th:replace="~{fragments/layout :: ticker-home}"></div>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
