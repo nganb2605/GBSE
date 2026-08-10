@@ -1,0 +1,10 @@
+.git
+target
+skillspector
+claude-seo
+.env
+.env.local
+src/main/resources/application-local.properties
+.vscode
+logs
+*.log
