@@ -64,7 +64,7 @@ public class PublicController {
                 ? product.getDescription()
                 : (product.getShortText() != null && !product.getShortText().isBlank())
                         ? product.getShortText()
-                        : "OMEAX – Your partner for mechanical and electrical equipment.";
+                        : "GBSE – Equipment and solutions for HVAC, water supply and fire fighting systems.";
         model.addAttribute("ogDescription", desc);
         return "product-detail";
     }

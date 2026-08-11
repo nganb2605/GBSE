@@ -5,16 +5,23 @@
 <th:block th:fragment="head(pageTitle)">
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title th:text="${pageTitle}">ŌMEAX</title>
+<title th:text="${pageTitle}">GBSE</title>
 <meta name="description" th:content="${ogDescription}"/>
+<!-- Root-relative canonical: GBSE has no confirmed domain yet.
+     TODO: switch canonicalUrl in GlobalModelAttributes to the absolute
+     https://<domain> form once the official domain is registered. -->
 <link rel="canonical" th:href="${canonicalUrl}"/>
+<link rel="icon" type="image/png" th:href="@{/images/logo.png}"/>
+<link rel="apple-touch-icon" th:href="@{/images/logo.png}"/>
 <!-- Open Graph -->
 <meta property="og:type" content="website"/>
-<meta property="og:site_name" content="OMEAX"/>
+<meta property="og:site_name" content="GBSE"/>
 <meta property="og:title" th:content="${pageTitle}"/>
 <meta property="og:description" th:content="${ogDescription}"/>
 <meta property="og:url" th:content="${canonicalUrl}"/>
-<meta property="og:image" content="https://www.omeax.vn/images/logo.png"/>
+<!-- TODO: og:image must be an absolute URL to render in link previews.
+     Prefix with the official domain once it exists. -->
+<meta property="og:image" content="/images/logo.png"/>
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" th:content="${pageTitle}"/>
@@ -32,7 +39,7 @@
   <a href="#main" class="skip-link">Skip to content</a>
   <div class="mega-backdrop" id="megaBackdrop"></div>
   <div class="container header-inner">
-    <a href="/" class="logo"><img src="/images/logo.png" alt="OMEAX" class="logo-img" fetchpriority="high" decoding="async"/></a>
+    <a href="/" class="logo"><img src="/images/logo.png" alt="GBSE" class="logo-img" fetchpriority="high" decoding="async"/></a>
     <nav class="nav">
       <!-- Products with mega-menu -->
       <div class="nav-mega" id="navMega">
@@ -213,8 +220,8 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="footer-logo"><img src="/images/logo.png" alt="OMEAX" class="logo-img"/></div>
-        <p>Your partner for mechanical and electrical equipment.</p>
+        <div class="footer-logo"><img src="/images/logo.png" alt="GBSE" class="logo-img"/></div>
+        <p>Equipment and solutions for HVAC, water supply and fire fighting systems.</p>
       </div>
       <div>
         <h4>Hanoi Office</h4>
@@ -226,13 +233,13 @@
       </div>
       <div>
         <h4>Contact</h4>
-        <p>info@omeax.com</p>
-        <p>+84 (0) 24 0000 0000</p>
+        <p>support@gbse.vn</p>
+        <!-- TODO: add the official GBSE phone number — none supplied or verified. -->
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 OMEAX Joint Stock Company. All rights reserved.</span>
-      <span>Registration number: 0110535209 — Established Nov 8th, 2023</span>
+      <span>© 2026 GBSE Company Limited. All rights reserved.</span>
+      <span>Registration number: 0107829897 — Established May 8th, 2017</span>
     </div>
   </div>
 </footer>

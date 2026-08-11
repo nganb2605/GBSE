@@ -24,14 +24,20 @@ public class GlobalModelAttributes {
         return request.getRequestURI();
     }
 
+    /**
+     * Root-relative canonical. GBSE has no confirmed domain yet, so no host is
+     * prefixed — browsers and crawlers resolve this against the page URL.
+     * TODO: return "https://<official-domain>" + request.getRequestURI() once the
+     * domain is registered; absolute canonicals are the SEO-preferred form.
+     */
     @ModelAttribute("canonicalUrl")
     public String canonicalUrl(HttpServletRequest request) {
-        return "https://www.omeax.vn" + request.getRequestURI();
+        return request.getRequestURI();
     }
 
     @ModelAttribute("ogDescription")
     public String ogDescription() {
-        return "OMEAX – Your partner for mechanical and electrical equipment.";
+        return "GBSE – Equipment and solutions for HVAC, water supply and fire fighting systems.";
     }
 
     @ModelAttribute("navRanges")

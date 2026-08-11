@@ -1,26 +1,40 @@
-# OMEAX Joint Stock Company
+# GBSE Company Limited
 
-> OMEAX Joint Stock Company (Business Registration: 0110535209, established November 8, 2023) is a Vietnam-based distributor of mechanical and electrical equipment for building systems, specializing in HVAC, plumbing, and fire protection applications. OMEAX distributes Grundfos pumps and Ocean Cooling Tower products and supplies complete MEP solutions to developers, contractors, and designers across Vietnam from offices in Hanoi (Thanh Xuan district) and Ho Chi Minh City (Tan Binh district).
+<!-- TODO: links below are root-relative because GBSE has no confirmed domain
+     yet. Prefix them with the official domain once it is registered. -->
 
-OMEAX is the Vietnamese member of the global Omeax group, which includes entities in France (Omeax SARL, headquarters), China (OMEAX Shanghai Flow Control Co., LTD), Hong Kong (Omeax Company Limited), and the Philippines (Omeax Entreprises).
+> GBSE Company Limited (GBSE Co., Ltd — business registration 0107829897, established May 8, 2017) is a Vietnam-based supplier of equipment and solutions for building services, covering heating and cooling, smart motor controlling, and smart remote-reading measurement instruments. GBSE serves HVAC, hot water, water supply and drainage, and fire fighting applications, and provides maintenance and service for pumps, heat pumps and heat exchangers. The company has 17 employees and operates from Hanoi (registered office in Cau Giay, operating office in Thanh Xuan) and a branch in Ho Chi Minh City (Tan Binh).
+
+Tagline: Confidence to Contribute.
 
 ## Product Lines
 
-- [Grundfos Pumps](https://www.omeax.vn/products): Booster pumps, transfer pumps, HVAC circulation pumps, drainage pumps, fire fighting pumps (UL/FM certified).
-- [Grundfos Valves](https://www.omeax.vn/products): General industrial valves, hydraulic control valves, special valves.
-- [Ocean Cooling Tower — Valves](https://www.omeax.vn/products): PICV (Pressure Independent Control Valves), motorized ball valves.
-- [Ocean Cooling Tower — Heat Pumps](https://www.omeax.vn/products): Air-to-water heat pumps, all-in-one heat pumps.
-- [Ocean Cooling Tower — Measurement](https://www.omeax.vn/products): Water meters, ultrasonic BTU meters, plate heat exchangers.
-- [Partner Systems](https://www.omeax.vn/products): Complete HVAC systems, hot water systems.
+Catalogue ranges as published on the site:
+
+- [Automatic Control Valve](/products): Neptune pilot operated automatic control valves and anti water hammer / surge anticipation valves, DN40 to DN1600.
+- [Control valve HVAC](/products): Danfoss motorized butterfly valves, motorized globe valves, and pressure independent control valves (PICV).
+- [Heatpump](/products): air source heat pumps and all-in-one heat pump models.
+- [Metering and Measuring](/products): energy meters, flowmeters (DN15–2000), and water meters (single jet, multi jet, bulk).
+- [Plate Heat Exchanger](/products): Danfoss Sondex plate heat exchangers.
 
 ## Key Pages
 
-- [About OMEAX](https://www.omeax.vn/about): Company profile, global group structure, Vietnam entity details.
-- [Product Catalogue](https://www.omeax.vn/products): Full product listing by brand range.
-- [Reference Projects](https://www.omeax.vn/projects): Portfolio of completed installations including Capital Place, Vinhomes Grand Park, VinFast factories, Hyatt Regency Ha Long, Sheraton Ha Giang, Marriott Bac Ninh, VinMec hospitals.
-- [News](https://www.omeax.vn/news): Technical articles and company updates.
-- [Contact](https://www.omeax.vn/contact): Office addresses and inquiry form.
+- [About GBSE](/about): company profile, registration details, focus market and application, value propositions.
+- [Product Catalogue](/products): full product listing by range.
+- [Projects](/projects): reference installations.
+- [News](/news): technical articles and company updates.
+- [Contact](/contact): office addresses and inquiry form.
 
 ## Served Market
 
-Vietnam nationwide. Client sectors: Grade-A office towers, luxury residential (Vingroup, Sun Group, CapitaLand, BRG Group), hotels (Marriott, Sheraton, Hyatt), hospitals (VinMec), data centers (CMC), industrial (VinFast).
+Vietnam nationwide — projects supplied across the North, South and Central regions.
+
+Focus market: hi/mid-end apartments, office buildings, hotels and resorts, airports, hospitals, and e-factory projects.
+
+Focus application: HVAC, hot water, water supply and drainage, and fire fighting.
+
+## Contact
+
+Email: support@gbse.vn
+
+<!-- TODO: add the official GBSE phone number — none supplied or verified. -->

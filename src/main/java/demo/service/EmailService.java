@@ -66,7 +66,7 @@ public class EmailService {
             Map<String, Object> body = Map.of(
                 "from",    emailFrom,
                 "to",      List.of(emailNhan),
-                "subject", "[OMEAX] New quote request from " + request.getFullName(),
+                "subject", "[GBSE] New quote request from " + request.getFullName(),
                 "html",    buildHtml(request, time)
             );
 
@@ -92,7 +92,7 @@ public class EmailService {
         return "<div style=\"font-family:Arial,sans-serif;max-width:600px;margin:0 auto\">"
              + "<div style=\"background:#1B6D42;padding:24px 32px;border-radius:8px 8px 0 0\">"
              + "<h2 style=\"color:#fff;margin:0\">New Quote Request</h2>"
-             + "<p style=\"color:rgba(255,255,255,.78);margin:4px 0 0\">OMEAX Admin Notification</p>"
+             + "<p style=\"color:rgba(255,255,255,.78);margin:4px 0 0\">GBSE Admin Notification</p>"
              + "</div>"
              + "<div style=\"background:#EAF6EF;padding:32px;border:1px solid #D5E3DA;border-top:none;border-radius:0 0 8px 8px\">"
              + "<table style=\"width:100%;border-collapse:collapse\">"

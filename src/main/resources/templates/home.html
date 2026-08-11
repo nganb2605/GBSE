@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<th:block th:replace="~{fragments/layout :: head('Home | OMEAX')}"></th:block>
+<th:block th:replace="~{fragments/layout :: head('Home | GBSE')}"></th:block>
+<!-- URLs below are root-relative on purpose: GBSE has no confirmed domain yet.
+     TODO: prefix @id / url / logo with the official domain once registered. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.omeax.vn/#organization",
-      "name": "OMEAX Joint Stock Company",
-      "alternateName": "OMEAX",
-      "url": "https://www.omeax.vn",
+      "@id": "/#organization",
+      "name": "GBSE Company Limited",
+      "alternateName": "GBSE",
+      "url": "/",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.omeax.vn/images/logo.png"
+        "url": "/images/logo.png"
       },
-      "email": "info@omeax.com",
-      "description": "OMEAX Joint Stock Company is a Vietnam-based distributor of mechanical and electrical equipment including Grundfos pumps, industrial valves, heat pumps, and building MEP equipment for HVAC, plumbing, and fire protection projects.",
-      "foundingDate": "2023-11-08",
-      "taxID": "0110535209",
+      "email": "support@gbse.vn",
+      "description": "GBSE Company Limited is a Vietnam-based supplier of equipment and solutions for heating and cooling, smart motor controlling, and smart remote-reading measurement instruments, serving HVAC, hot water, water supply and drainage, and fire fighting applications.",
+      "foundingDate": "2017-05-08",
+      "taxID": "0107829897",
+      "numberOfEmployees": { "@type": "QuantitativeValue", "value": 17 },
       "address": [
         {
           "@type": "PostalAddress",
-          "name": "Hanoi Office",
+          "name": "Registered Address",
+          "streetAddress": "4th floor, Vinata2B tower, 289 Khuat Duy Tien",
+          "addressLocality": "Cau Giay",
+          "addressRegion": "Hanoi",
+          "addressCountry": "VN"
+        },
+        {
+          "@type": "PostalAddress",
+          "name": "Hanoi Operating Office",
           "streetAddress": "Villa 7 HDI Homes, 201 Nguyen Tuan",
           "addressLocality": "Thanh Xuan",
           "addressRegion": "Hanoi",
@@ -42,11 +53,11 @@
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.omeax.vn/#website",
-      "url": "https://www.omeax.vn",
-      "name": "OMEAX",
-      "description": "OMEAX – Your partner for mechanical and electrical equipment.",
-      "publisher": { "@id": "https://www.omeax.vn/#organization" },
+      "@id": "/#website",
+      "url": "/",
+      "name": "GBSE",
+      "description": "GBSE – Equipment and solutions for HVAC, water supply and fire fighting systems.",
+      "publisher": { "@id": "/#organization" },
       "inLanguage": "en"
     }
   ]
@@ -60,8 +71,8 @@
 <section class="hero">
   <div class="container">
     <p class="hero-eyebrow">COMPANY INTRODUCTION</p>
-    <h1 class="hero-title">OMEAX JOINT STOCK COMPANY</h1>
-    <p class="hero-lead">Your partner for mechanical and electrical equipment</p>
+    <h1 class="hero-title">GBSE COMPANY LIMITED</h1>
+    <p class="hero-lead">Confidence to Contribute</p>
     <div class="hero-actions">
       <a class="btn btn-light btn-hero" href="/products">Explore Products →</a>
       <a class="btn btn-ghost-light btn-hero" href="/contact">Contact Us</a>
@@ -73,7 +84,7 @@
   <div class="container home-intro">
     <p class="eyebrow">About Us</p>
     <h2 class="section-title">Who We Are</h2>
-    <p class="home-intro-body">OMEAX Joint Stock Company is a Vietnam-based partner for mechanical and electrical equipment serving HVAC, plumbing, and fire protection projects. With over 15 years of experience and a global network, we deliver end-to-end solutions from design consulting and equipment supply to after-sales support.</p>
+    <p class="home-intro-body">GBSE Company Limited supplies equipment and solutions for HVAC, hot water, water supply and drainage, and fire fighting systems across Vietnam. With more than 15 years of experience in pumps, heat pumps, drives, valves and heat exchangers, we support every project from equipment selection through after-sale technical support, warranty, upgrade and repair.</p>
     <a class="btn btn-primary mt-2" href="/about">Find out more →</a>
   </div>
 </section>

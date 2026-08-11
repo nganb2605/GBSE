@@ -3,4 +3,6 @@ Allow: /
 Disallow: /login
 Disallow: /admin/
 
-Sitemap: https://www.omeax.vn/sitemap.xml
+# TODO: the Sitemap directive requires an absolute URL, and GBSE has no
+# confirmed domain yet. Uncomment and fill in once the domain is registered:
+# Sitemap: https://<official-gbse-domain>/sitemap.xml

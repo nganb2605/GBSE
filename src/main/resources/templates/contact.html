@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <th:block th:replace="~{fragments/layout :: head('Contact | OMEAX')}"></th:block>
+  <th:block th:replace="~{fragments/layout :: head('Contact | GBSE')}"></th:block>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.omeax.vn/" },
-      { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://www.omeax.vn/contact" }
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+      { "@type": "ListItem", "position": 2, "name": "Contact", "item": "/contact" }
     ]
   }
   </script>
@@ -31,7 +31,7 @@
 
         <!-- Company info -->
         <div class="contact-info">
-          <h2 class="contact-company-name">OMEAX Joint Stock Company</h2>
+          <h2 class="contact-company-name">GBSE Company Limited</h2>
           <div class="contact-details">
             <div class="contact-row">
               <div>
@@ -48,15 +48,15 @@
             <div class="contact-row">
               <div>
                 <div class="contact-label">Registered address</div>
-                <div class="contact-value">134A Giang Vo, Ba Dinh, Ha Noi.</div>
+                <div class="contact-value">4th floor, Vinata2B tower, 289 Khuat Duy Tien, Cau Giay, Hanoi.</div>
               </div>
             </div>
             <div class="contact-row">
               <div>
                 <div class="contact-label">Contact</div>
+                <!-- TODO: add the official GBSE phone number — none supplied or verified. -->
                 <div class="contact-value">
-                  Email: info@omeax.com<br>
-                  Phone: +84 (0) 24 0000 0000
+                  Email: support@gbse.vn
                 </div>
               </div>
             </div>
