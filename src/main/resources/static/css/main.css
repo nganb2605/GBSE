@@ -141,6 +141,9 @@ a{color:inherit;text-decoration:none}
   border:1px solid var(--color-border);
   padding:4px 0;
   min-width:190px;
+  /* The Automatic Control Valve range lists 28 models — cap the panel to the
+     viewport and scroll rather than running off the bottom of the screen. */
+  max-height:calc(100vh - 120px);overflow-y:auto;
   opacity:0;visibility:hidden;pointer-events:none;
   transform:translateX(-6px);
   transition:opacity .15s var(--ease),transform .15s var(--ease),visibility .15s;

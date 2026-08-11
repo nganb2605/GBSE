@@ -36,7 +36,7 @@ public class Product {
     @Column(name = "hinh_anh", columnDefinition = "varchar(255)")
     private String imagePath;
 
-    @Column(name = "danh_muc", columnDefinition = "varchar(100)")
+    @Column(name = "danh_muc", columnDefinition = "varchar(200)")
     private String category;
 
     @Column(columnDefinition = "varchar(100)")
