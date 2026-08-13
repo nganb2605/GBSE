@@ -27,18 +27,34 @@
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main id="main">
 
+<!-- Breadcrumbs follow the real parent chain, each link scrolling to that
+     category's block on the catalogue page. -->
 <section class="crumb">
   <div class="container">
     <a href="/">Home</a><span class="sep">/</span>
     <a href="/products">Products</a><span class="sep">/</span>
+    <th:block th:if="${product.primaryCategory != null}">
+      <th:block th:each="a : ${product.primaryCategory.ancestors}">
+        <a th:href="|/products#cat-${a.slug}|" th:text="${a.name}">Ancestor</a><span class="sep">/</span>
+      </th:block>
+      <a th:href="|/products#cat-${product.primaryCategory.slug}|"
+         th:text="${product.primaryCategory.name}">Category</a><span class="sep">/</span>
+    </th:block>
     <span class="crumb-current" th:text="${product.name}">Product</span>
   </div>
 </section>
 
 <section class="section-pad-3 section-pb-5">
   <div class="container">
+
+    <h1 class="detail-title" th:text="${product.name}">Name</h1>
+    <div class="tags" th:if="${not #lists.isEmpty(product.applicationsList)}">
+      <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
+    </div>
+
+    <!-- Artwork with its documents tucked underneath; the description sits
+         alongside, in the slot the specification table used to occupy. -->
     <div class="detail-hero">
-      <!-- Left column: artwork and datasheets -->
       <div class="detail-media">
         <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}" fetchpriority="high" decoding="async"/></div>
         <div class="spec-card" th:if="${not #lists.isEmpty(product.documentsList)}">
@@ -50,25 +66,29 @@
           </ul>
         </div>
       </div>
-      <!-- Right column: name, applications, specifications -->
-      <div>
-        <h1 th:text="${product.name}">Name</h1>
-        <div class="tags" th:if="${not #lists.isEmpty(product.applicationsList)}">
-          <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
+      <div class="detail-info">
+        <!-- One row per point, so the description reads as a structured
+             block rather than a single run of prose. -->
+        <div class="spec-card" th:if="${not #lists.isEmpty(product.descriptionLines)}">
+          <h2>Description</h2>
+          <ul class="desc-list">
+            <li th:each="l : ${product.descriptionLines}" th:text="${l}">point</li>
+          </ul>
         </div>
-        <div class="spec-card mt-2">
+        <!-- Ranges outside Automatic Control Valve still carry a spec table. -->
+        <div class="spec-card" th:if="${not #lists.isEmpty(product.specsList)}">
           <h2>Technical Specs</h2>
-          <div th:if="${not #lists.isEmpty(product.specsList)}" class="spec-table">
+          <div class="spec-table">
             <th:block th:each="s : ${product.specsList}">
               <div class="lbl" th:text="${s.label}">label</div>
               <div class="val" th:text="${s.value}">value</div>
             </th:block>
           </div>
-          <p th:if="${#lists.isEmpty(product.specsList)}" class="pd-nospec">Contact us for detailed specifications tailored to your project.</p>
-          <a href="/contact" class="btn btn-primary btn-mt">Contact Us</a>
         </div>
+        <a href="/contact" class="btn btn-primary">Contact Us</a>
       </div>
     </div>
+
     <div class="mt-2">
       <a href="/products" class="text-navy-bold">← Back to products</a>
     </div>

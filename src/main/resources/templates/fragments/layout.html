@@ -34,6 +34,33 @@
 <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </th:block>
 
+<!-- ── MEGA MENU COLUMN (recursive) ───────────────────────────────────────────
+     One column of categories. An item with children carries its own column,
+     nested inside that item's row so it is positioned against the row it
+     belongs to; the CSS shows it only while the row is hovered. An item
+     without children carries nothing at all, so a leaf opens no column and
+     reserves no space.
+
+     The cascade stops at level 3. Every range except Automatic Control Valve
+     is fully covered by three levels, and three 236px columns are also what
+     fits to the right of the centred "Products" link at 1280px — a fourth
+     would run off-screen there. The deeper categories that only Automatic
+     Control Valve has, under "1. Pressure Control Series" and "6. Additional
+     Products", are reached from the catalogue page the level-3 links land
+     on. Raise the two `level < 3` tests together to go deeper. -->
+<div th:fragment="meganode(cats, level)" class="mega-list">
+  <div class="mega-row" th:each="c : ${cats}">
+    <a class="mega-item"
+       th:href="${level == 1} ? |/products#range-${c.slug}| : |/products#cat-${c.slug}|">
+      <span th:text="${c.name}">Category</span>
+      <span class="mega-arr" th:if="${!c.leaf and level < 3}" aria-hidden="true">›</span>
+    </a>
+    <div class="mega-sublist" th:if="${!c.leaf and level < 3}">
+      <div th:replace="~{fragments/layout :: meganode(${c.children}, ${level} + 1)}"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ── NAVBAR ─────────────────────────────────────────────────────────────── -->
 <header th:fragment="navbar" class="header">
   <a href="#main" class="skip-link">Skip to content</a>
@@ -41,20 +68,22 @@
   <div class="container header-inner">
     <a href="/" class="logo"><img src="/images/logo.png" alt="GBSE" class="logo-img" fetchpriority="high" decoding="async"/></a>
     <nav class="nav">
-      <!-- Products with mega-menu -->
+      <!-- Products mega-menu. Categories only — no products, images or specs.
+           A cascade: the panel below "Products" is the ranges, and each item
+           that has children carries its own column, opening to its right.
+           Every column is rendered up front and shown by hover alone, so
+           opening one needs no markup rebuilding and no measured positioning.
+           Every link lands on the single catalogue page: the ranges at
+           #range-<slug>, the categories at #cat-<slug>. -->
       <div class="nav-mega" id="navMega">
-        <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">
-          Products <span class="mega-caret">▾</span>
+        <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}"
+           href="/products" id="megaTrigger" aria-haspopup="true" aria-expanded="false">
+          Products <span class="mega-caret" aria-hidden="true">▾</span>
         </a>
-        <div class="mega-panel" id="megaPanel" th:if="${navRanges != null and !#lists.isEmpty(navRanges)}">
-          <a class="mega-cat-item"
-             th:each="r : ${navRanges}"
-             th:data-range="${r.id}"
-             th:href="@{'/products#range-' + ${r.id}}">
-            <span th:text="${r.brand}">Brand</span>
-            <span class="mega-cat-arr">›</span>
-          </a>
-        </div>
+        <nav class="mega-panel" id="megaPanel" aria-label="Product categories"
+             th:if="${navCategories != null and !#lists.isEmpty(navCategories)}">
+          <div th:replace="~{fragments/layout :: meganode(${navCategories}, 1)}"></div>
+        </nav>
       </div>
       <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
       <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
@@ -65,20 +94,6 @@
       <span></span><span></span><span></span>
     </button>
   </div>
-  <!-- Flyout product data (hidden, populated into flyout panel by JS) -->
-  <div id="flyoutData" th:if="${navRanges != null and !#lists.isEmpty(navRanges)}" class="is-hidden" aria-hidden="true">
-    <div th:each="r : ${navRanges}" th:data-range="${r.id}">
-      <a class="flyout-prod-link"
-         th:each="p : ${r.products}"
-         th:href="@{'/products/' + ${p.id}}"
-         th:text="${p.name}">Product</a>
-      <a class="flyout-view-all" th:href="@{'/products#range-' + ${r.id}}">View all →</a>
-    </div>
-  </div>
-  <!-- Flyout submenu panel (positioned by JS on category hover) -->
-  <div class="flyout-sub" id="flyoutSub" aria-hidden="true">
-    <div id="flyoutSubLinks"></div>
-  </div>
   <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <!-- Products accordion -->
     <div class="mob-prod-acc">
@@ -87,10 +102,19 @@
         Products <span class="mob-acc-caret">▾</span>
       </button>
       <div class="mob-prod-body" id="mobProdBody">
-        <a class="mob-prod-link"
-           th:each="r : ${navRanges}"
-           th:href="@{'/products#range-' + ${r.id}}"
-           th:text="${r.brand}">Range</a>
+        <div class="mob-range" th:each="r : ${navCategories}">
+          <div class="mob-range-row">
+            <a class="mob-prod-link" th:href="|/products#range-${r.slug}|" th:text="${r.name}">Range</a>
+            <button type="button" class="mob-sub-toggle" th:if="${!r.leaf}" aria-expanded="false"
+                    th:attr="aria-label='Show ' + ${r.name} + ' categories'">
+              <span class="mob-acc-caret" aria-hidden="true">▾</span>
+            </button>
+          </div>
+          <div class="mob-sub" th:if="${!r.leaf}">
+            <a class="mob-sub-link" th:each="c : ${r.children}"
+               th:href="|/products#cat-${c.slug}|" th:text="${c.name}">Category</a>
+          </div>
+        </div>
       </div>
     </div>
     <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
@@ -142,62 +166,71 @@
         });
       }
 
-      // --- Desktop flyout menu ---
+      // --- Mobile category accordion ---
+      var mobBodyEl = document.getElementById('mobProdBody');
+      if (mobBodyEl) {
+        mobBodyEl.querySelectorAll('.mob-sub-toggle').forEach(function(t){
+          t.addEventListener('click', function(){
+            var open = t.getAttribute('aria-expanded') !== 'true';
+            t.setAttribute('aria-expanded', String(open));
+            t.classList.toggle('open', open);
+            t.closest('.mob-range').querySelector('.mob-sub').classList.toggle('open', open);
+          });
+        });
+      }
+
+      // --- Desktop mega menu ---
+      // Only the top-level panel is opened here. Which column cascades out of
+      // which item is decided by :hover in CSS, so there is nothing to track,
+      // measure or rebuild.
       var navMega = document.getElementById('navMega');
       var megaPanel = document.getElementById('megaPanel');
-      var flyoutSub = document.getElementById('flyoutSub');
-      var flyoutSubLinks = document.getElementById('flyoutSubLinks');
-      var flyoutData = document.getElementById('flyoutData');
+      var megaTrigger = document.getElementById('megaTrigger');
       var backdrop = document.getElementById('megaBackdrop');
       if (navMega && megaPanel) {
         var closeTimer = null;
+
         function keepOpen() { clearTimeout(closeTimer); }
-        function scheduleClose() {
-          closeTimer = setTimeout(function(){
-            navMega.classList.remove('mega-open');
-            if (flyoutSub) flyoutSub.classList.remove('flyout-open');
-            if (backdrop) backdrop.classList.remove('mega-open');
-            megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){ c.classList.remove('mega-active'); });
-          }, 200);
-        }
-        function showFlyout(catItem) {
-          keepOpen();
-          var rangeId = catItem.dataset.range;
-          if (flyoutData && flyoutSubLinks) {
-            var src = flyoutData.querySelector('[data-range="' + rangeId + '"]');
-            flyoutSubLinks.innerHTML = src ? src.innerHTML : '';
-          }
-          if (flyoutSub) {
-            var panelRect = megaPanel.getBoundingClientRect();
-            var itemRect = catItem.getBoundingClientRect();
-            flyoutSub.style.top = itemRect.top + 'px';
-            flyoutSub.style.left = (panelRect.right + 4) + 'px';
-            flyoutSub.classList.add('flyout-open');
-          }
-          megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){
-            c.classList.toggle('mega-active', c.dataset.range === rangeId);
-          });
-        }
-        navMega.addEventListener('mouseenter', function(){
+        function openMega() {
           keepOpen();
           navMega.classList.add('mega-open');
           if (backdrop) backdrop.classList.add('mega-open');
-        });
-        navMega.addEventListener('mouseleave', scheduleClose);
-        if (flyoutSub) {
-          flyoutSub.addEventListener('mouseenter', keepOpen);
-          flyoutSub.addEventListener('mouseleave', scheduleClose);
+          if (megaTrigger) megaTrigger.setAttribute('aria-expanded', 'true');
         }
-        if (backdrop) backdrop.addEventListener('click', function(){
+        function closeMega() {
           clearTimeout(closeTimer);
           navMega.classList.remove('mega-open');
-          if (flyoutSub) flyoutSub.classList.remove('flyout-open');
-          backdrop.classList.remove('mega-open');
-          megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){ c.classList.remove('mega-active'); });
+          if (backdrop) backdrop.classList.remove('mega-open');
+          if (megaTrigger) megaTrigger.setAttribute('aria-expanded', 'false');
+        }
+        function scheduleClose() { closeTimer = setTimeout(closeMega, 200); }
+
+        navMega.addEventListener('mouseenter', openMega);
+        navMega.addEventListener('focusin', openMega);
+
+        // Closing is scoped to the header, which contains both the trigger and
+        // the panel, rather than to the trigger alone — the panel is a
+        // descendant of the header, so hovering it never counts as leaving.
+        // Hovering a sibling nav link closes it at once, so the header scope
+        // never leaves it hanging open.
+        var header = navMega.closest('.header');
+        if (header) {
+          header.addEventListener('mouseenter', keepOpen);
+          header.addEventListener('mouseleave', scheduleClose);
+        }
+        document.querySelectorAll('.nav > a').forEach(function (link) {
+          if (link !== megaTrigger) link.addEventListener('mouseenter', closeMega);
         });
-        megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){
-          c.addEventListener('mouseenter', function(){ showFlyout(c); });
+
+        // Keyboard: leaving the menu entirely closes it, Escape closes it now.
+        navMega.addEventListener('focusout', function(e){
+          if (!navMega.contains(e.relatedTarget)) scheduleClose();
         });
+        navMega.addEventListener('keydown', function(e){
+          if (e.key === 'Escape') { closeMega(); if (megaTrigger) megaTrigger.focus(); }
+        });
+
+        if (backdrop) backdrop.addEventListener('click', closeMega);
       }
     })();
   </script>

@@ -42,31 +42,20 @@
       <!-- Sticky range index -->
       <nav class="cat-index" aria-label="Product ranges">
         <p class="cat-index-title">Ranges</p>
-        <a th:each="r,it : ${ranges}" th:href="|#range-${r.id}|" class="cat-index-link" th:data-range="${r.id}">
+        <a th:each="r,it : ${roots}" th:href="|#range-${r.slug}|" class="cat-index-link" th:data-range="${r.slug}">
           <span class="n" th:text="${it.count}">1</span>
-          <span th:text="${r.brand}">Brand</span>
+          <span th:text="${r.name}">Range</span>
         </a>
       </nav>
 
       <div class="range-list">
-      <div class="range open" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
+      <div class="range open" th:each="r,it : ${roots}" th:id="|range-${r.slug}|">
         <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
-          <h3 th:data-n="${it.count}" th:text="${r.brand}">Brand</h3>
+          <h3 th:data-n="${it.count}" th:text="${r.name}">Range</h3>
           <span class="chevron"></span>
         </button>
         <div class="range-body">
-          <div class="subcat" th:each="c : ${r.categories}">
-            <h4 class="subcat-title" th:if="${c.name != null and !c.name.isBlank()}" th:text="${c.name}">Category</h4>
-            <div class="product-grid">
-              <a class="prod-card" th:each="p : ${c.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.category}">
-                <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}" loading="lazy" decoding="async"></div>
-                <div class="pbody">
-                  <h4 th:text="${p.name}">Name</h4>
-                  <p class="pshort" th:text="${p.shortText}">short</p>
-                </div>
-              </a>
-            </div>
-          </div>
+          <div th:replace="~{fragments/catalogue :: catnode(${r}, 0)}"></div>
         </div>
       </div>
       </div>

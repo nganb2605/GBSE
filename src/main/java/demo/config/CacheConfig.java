@@ -9,8 +9,9 @@ import org.springframework.context.annotation.Configuration;
  *   spring.cache.type=caffeine
  *   spring.cache.caffeine.spec=maximumSize=500,expireAfterWrite=600s
  *
- * Cache "products" holds the full product list for up to 10 minutes.
- * Products are managed via Flyway migrations; the cache refreshes on restart.
+ * Cache "products" holds the full product list and "categories" the
+ * catalogue tree, each for up to 10 minutes. Both are managed via Flyway
+ * migrations; the caches refresh on restart.
  */
 @Configuration
 @EnableCaching

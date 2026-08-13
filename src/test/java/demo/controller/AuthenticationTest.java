@@ -25,6 +25,7 @@ import demo.model.User;
 import demo.repository.UserRepository;
 import demo.service.ContactRateLimiter;
 import demo.service.ContactRequestService;
+import demo.service.CategoryService;
 import demo.service.CustomUserDetailsService;
 import demo.service.LoginAttemptService;
 import demo.service.ProductService;
@@ -35,7 +36,8 @@ class AuthenticationTest {
 
     @Autowired MockMvc mvc;
 
-    @MockBean ProductService productService;            // used by GlobalModelAttributes (nav)
+    @MockBean ProductService productService;
+    @MockBean CategoryService categoryService;          // used by GlobalModelAttributes (nav)
     @MockBean ContactRequestService contactRequestService;
     @MockBean ContactRateLimiter contactRateLimiter;
     @MockBean UserRepository userRepository;
@@ -44,7 +46,7 @@ class AuthenticationTest {
     @BeforeEach
     void setUp() {
         when(productService.findAll()).thenReturn(List.of());
-        when(productService.getRangeGroups(org.mockito.ArgumentMatchers.any())).thenReturn(List.of());
+        when(categoryService.getRoots()).thenReturn(List.of());
 
         User admin = new User("admin", new BCryptPasswordEncoder().encode("secret"), "ADMIN");
         admin.setEnabled(true);

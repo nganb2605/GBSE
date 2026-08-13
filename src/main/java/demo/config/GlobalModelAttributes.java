@@ -6,17 +6,17 @@ import java.util.List;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import demo.model.RangeGroup;
-import demo.service.ProductService;
+import demo.model.Category;
+import demo.service.CategoryService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalModelAttributes {
 
-    private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public GlobalModelAttributes(ProductService productService) {
-        this.productService = productService;
+    public GlobalModelAttributes(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @ModelAttribute("currentUri")
@@ -40,10 +40,11 @@ public class GlobalModelAttributes {
         return "GBSE – Equipment and solutions for HVAC, water supply and fire fighting systems.";
     }
 
-    @ModelAttribute("navRanges")
-    public List<RangeGroup> navRanges() {
+    /** Category tree for the mega menu — categories only, never products. */
+    @ModelAttribute("navCategories")
+    public List<Category> navCategories() {
         try {
-            return productService.getRangeGroups(productService.findAll());
+            return categoryService.getRoots();
         } catch (Exception e) {
             return Collections.emptyList();
         }

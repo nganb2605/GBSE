@@ -1,7 +1,5 @@
 package demo.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import demo.dto.ContactFormDto;
 import demo.model.Product;
 import demo.model.ContactRequest;
+import demo.service.CategoryService;
 import demo.service.ContactRateLimiter;
 import demo.service.ContactRequestService;
 import demo.service.ProductService;
@@ -24,13 +23,16 @@ import jakarta.servlet.http.HttpServletRequest;
 public class PublicController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
     private final ContactRequestService contactRequestService;
     private final ContactRateLimiter contactRateLimiter;
 
     public PublicController(ProductService productService,
+                            CategoryService categoryService,
                             ContactRequestService contactRequestService,
                             ContactRateLimiter contactRateLimiter) {
         this.productService = productService;
+        this.categoryService = categoryService;
         this.contactRequestService = contactRequestService;
         this.contactRateLimiter = contactRateLimiter;
     }
@@ -49,9 +51,8 @@ public class PublicController {
 
     @GetMapping({"/products", "/products/"})
     public String products(Model model) {
-        List<Product> all = productService.findAll();
-        model.addAttribute("ranges", productService.getRangeGroups(all));
-        model.addAttribute("allProducts", all);
+        model.addAttribute("roots", categoryService.getRoots());
+        model.addAttribute("allProducts", productService.findAllForSearch());
         return "products";
     }
 

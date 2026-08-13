@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import demo.config.SecurityConfig;
 import demo.service.ContactRateLimiter;
+import demo.service.CategoryService;
 import demo.service.ContactRequestService;
 import demo.service.ProductService;
 
@@ -31,14 +32,15 @@ class ContactControllerTest {
 
     @Autowired MockMvc mvc;
 
-    @MockBean ProductService productService;            // used by GlobalModelAttributes (nav)
+    @MockBean ProductService productService;
+    @MockBean CategoryService categoryService;          // used by GlobalModelAttributes (nav)
     @MockBean ContactRequestService contactRequestService;
     @MockBean ContactRateLimiter contactRateLimiter;
 
     @BeforeEach
     void stubNav() {
         when(productService.findAll()).thenReturn(List.of());
-        when(productService.getRangeGroups(any())).thenReturn(List.of());
+        when(categoryService.getRoots()).thenReturn(List.of());
     }
 
     @Test

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--
+  Shared catalogue building blocks. This file is never rendered on its own.
+-->
+
+<!--
+  Recursive category block: heading, the category's own products, then each
+  child category. Depth 0 is the range itself, whose name the range header
+  already shows, so it gets no heading of its own.
+
+  Every node carries a #cat-<slug> anchor — the catalogue is the only product
+  page, so the mega menu and the breadcrumbs scroll to a category here rather
+  than opening a page of its own.
+-->
+<div th:fragment="catnode(cat, depth)" class="subcat" th:classappend="|subcat-d${depth}|"
+     th:id="|cat-${cat.slug}|">
+  <h4 class="subcat-title" th:if="${depth > 0}">
+    <a th:href="|#cat-${cat.slug}|" th:text="${cat.name}">Category</a>
+  </h4>
+  <div class="product-grid" th:if="${!#lists.isEmpty(cat.products)}">
+    <a class="prod-card" th:each="p : ${cat.products}" th:href="@{'/products/' + ${p.id}}"
+       th:data-name="${p.name}" th:data-short="${p.shortText}">
+      <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}" loading="lazy" decoding="async"></div>
+      <div class="pbody">
+        <h4 th:text="${p.name}">Name</h4>
+        <p class="pshort" th:text="${p.shortText}">short</p>
+      </div>
+    </a>
+  </div>
+  <th:block th:each="child : ${cat.children}">
+    <div th:replace="~{fragments/catalogue :: catnode(${child}, ${depth} + 1)}"></div>
+  </th:block>
+</div>
+
+</body>
+</html>
