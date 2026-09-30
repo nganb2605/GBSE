@@ -22,7 +22,8 @@ public class DataInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final String adminUsername;
     private final String adminPassword;
-
+    private final SecureRandom random = new SecureRandom();
+    
     public DataInitializer(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            @Value("${ADMIN_USERNAME:admin}") String adminUsername,
@@ -36,7 +37,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         boolean userExists = userRepository.existsByUsername(adminUsername);
-
+        
         if (!userExists) {
             User admin = new User();
             admin.setUsername(adminUsername);
@@ -46,7 +47,7 @@ public class DataInitializer implements CommandLineRunner {
                 password = adminPassword;
             } else {
                 byte[] randomBytes = new byte[12];
-                new SecureRandom().nextBytes(randomBytes);
+                random.nextBytes(randomBytes);
                 password = Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
             }
 
