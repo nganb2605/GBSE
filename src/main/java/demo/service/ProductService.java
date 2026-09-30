@@ -3,7 +3,9 @@ package demo.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +19,13 @@ import demo.repository.ProductRepository;
 public class ProductService {
 
     private final ProductRepository productRepository;
-
+    private ProductService self;
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
+    }
+     @Autowired
+    public void setSelf(@Lazy ProductService self) {
+        this.self = self;
     }
 
     @Cacheable("products")
@@ -28,14 +34,10 @@ public class ProductService {
         return productRepository.findAll(Sort.by("id").ascending());
     }
 
-    /**
-     * Flat list for the catalogue page's client-side search box. Entities are
-     * not inlined into the page directly — they now reach into the category
-     * tree, which Jackson cannot serialise without cycling parent/children.
-     */
     @Transactional(readOnly = true)
     public List<ProductSearchItem> findAllForSearch() {
-        return findAll().stream()
+        // 3. Sửa findAll() thành self.findAll() để đi qua Proxy
+        return self.findAll().stream()
             .map(p -> new ProductSearchItem(p.getId(), p.getName(), p.getShortText(), p.getImage()))
             .toList();
     }
