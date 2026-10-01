@@ -9,13 +9,13 @@ Tagline: Confidence to Contribute.
 
 ## Product Lines
 
-Catalogue ranges as published on the site:
+Catalogue ranges as published on the site, in display order:
 
-- [Automatic Control Valve](/products): Neptune pilot operated automatic control valves and anti water hammer / surge anticipation valves, DN40 to DN1600.
-- [Control valve HVAC](/products): Danfoss motorized butterfly valves, motorized globe valves, and pressure independent control valves (PICV).
-- [Heatpump](/products): air source heat pumps and all-in-one heat pump models.
-- [Metering and Measuring](/products): energy meters, flowmeters (DN15–2000), and water meters (single jet, multi jet, bulk).
-- [Plate Heat Exchanger](/products): Danfoss Sondex plate heat exchangers.
+- [Plate Heat Exchanger](/products#range-phe): plate heat exchangers.
+- [Metering and Measuring](/products#range-metering): Water Meter, Energy Meter, Flowmeter.
+- [Heatpump](/products#range-heatpump): Heatpump Air Source and Heatpump all in one.
+- [Automatic Control Valve](/products#range-automatic-control-valve): Anti water hammer valves and Pilot operated control valves.
+- [Control valve HVAC](/products#range-control-valve-hvac): Pressure Independent Control Valve, Motorized Butterfly Valve, and Motorized Globe Valve.
 
 ## Key Pages
 

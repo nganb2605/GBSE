@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
@@ -18,6 +20,20 @@ class CategoryServiceTest {
 
     private final CategoryRepository repository = mock(CategoryRepository.class);
     private final CategoryService service = new CategoryService(repository);
+
+    @Test
+    void navigationInitializesNestedChildrenWithoutLoadingProducts() {
+        Category root = mock(Category.class);
+        Category child = mock(Category.class);
+        when(repository.findRoots()).thenReturn(List.of(root));
+        when(root.getChildren()).thenReturn(List.of(child));
+        when(child.getChildren()).thenReturn(List.of());
+
+        assertEquals(List.of(root), service.getNavigationRoots());
+        verify(child).getChildren();
+        verify(root, never()).getProducts();
+        verify(child, never()).getProducts();
+    }
 
     private static Category category(String slug, String name, Category parent) {
         Category c = new Category();

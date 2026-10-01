@@ -58,7 +58,7 @@ class AuthenticationTest {
     void admin_whenUnauthenticated_redirectsToLogin() throws Exception {
         mvc.perform(get("/admin"))
            .andExpect(status().is3xxRedirection())
-           .andExpect(redirectedUrlPattern("**/login"));
+           .andExpect(redirectedUrl("/login"));
     }
 
     @Test
