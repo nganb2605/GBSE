@@ -1,0 +1,31 @@
+name: GBSE CI
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Lay source code
+        uses: actions/checkout@v6
+
+      - name: Cai Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Build va test
+        run: mvn -B verify
+
+      - name: Luu file JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: gbse-jar
+          path: target/*.jar
+          if-no-files-found: error
