@@ -87,7 +87,8 @@ class CatalogueRenderTest {
 
         String html = mvc.perform(get("/products"))
             .andExpect(status().isOk())
-            .andExpect(content().string(org.hamcrest.Matchers.containsString("<details class=\"catalogue-group\"")))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("<section class=\"catalogue-group\"")))
+            .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("<details class=\"catalogue-group\""))))
             .andExpect(content().string(org.hamcrest.Matchers.containsString("Water meter DN15-20 single jet")))
             .andExpect(content().string(org.hamcrest.Matchers.containsString("Heatpump Air Source")))
             .andExpect(content().string(org.hamcrest.Matchers.containsString(longName.getName())))
@@ -96,6 +97,7 @@ class CatalogueRenderTest {
             .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("/docs/mag-c.pdf"))))
             .andReturn().getResponse().getContentAsString();
         assertEquals(5, html.split("class=\"prod-card\"", -1).length - 1);
+        assertEquals(5, html.split("<span>View product</span>", -1).length - 1);
         assertEquals(3, html.split("class=\"product-grid\"", -1).length - 1);
     }
 
@@ -107,6 +109,7 @@ class CatalogueRenderTest {
         meter.setId(5L);
         meter.setName("Water meter DN15-20 single jet");
         meter.setCategories(List.of(water));
+        meter.setDescription("Brand name: BMETERS\nWorking pressure: 16 bar\nBRAND NAME : Hidden brand");
         meter.setFeatures("[\"Anti magnetic fraud protection\"]");
         meter.setSpecs("[{\"label\":\"Model\",\"value\":\"GSD8-RFM\"}]");
         meter.setDocuments("[{\"label\":\"RFM-MB1\",\"url\":\"/docs/rfm-mb1.pdf\"},{\"label\":\"RFM-TX1\",\"url\":\"/docs/rfm-tx1.pdf\"}]");
@@ -117,6 +120,10 @@ class CatalogueRenderTest {
         mvc.perform(get("/products/5"))
             .andExpect(status().isOk())
             .andExpect(content().string(org.hamcrest.Matchers.containsString("Anti magnetic fraud protection")))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("Working pressure: 16 bar")))
+            .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("<li>Brand name: BMETERS</li>"))))
+            .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("<li>BRAND NAME : Hidden brand</li>"))))
+            .andExpect(content().string(org.hamcrest.Matchers.matchesPattern("(?s).*class=\"detail-header\".*<h1[^>]*>.*?</h1>\\s*<a href=\"/contact\"[^>]*>Contact Us</a>\\s*</div>.*")))
             .andExpect(content().string(org.hamcrest.Matchers.containsString("/products#cat-water-meter")))
             .andExpect(content().string(org.hamcrest.Matchers.containsString("/docs/rfm-mb1.pdf")))
             .andExpect(content().string(org.hamcrest.Matchers.containsString("/docs/rfm-tx1.pdf")));
