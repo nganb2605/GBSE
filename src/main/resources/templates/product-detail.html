@@ -37,7 +37,8 @@
       <th:block th:each="a : ${product.primaryCategory.ancestors}">
         <a th:href="|/products#cat-${a.slug}|" th:text="${a.name}">Ancestor</a><span class="sep">/</span>
       </th:block>
-      <a th:href="|/products#cat-${product.primaryCategory.slug}|"
+      <a th:if="${!product.primaryCategory.name.equalsIgnoreCase(product.name)}"
+         th:href="|/products#cat-${product.primaryCategory.slug}|"
          th:text="${product.primaryCategory.name}">Category</a><span class="sep">/</span>
     </th:block>
     <span class="crumb-current" th:text="${product.name}">Product</span>
@@ -56,7 +57,7 @@
          alongside, in the slot the specification table used to occupy. -->
     <div class="detail-hero">
       <div class="detail-media">
-        <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}" fetchpriority="high" decoding="async"/></div>
+        <div class="img-box"><img th:src="@{/images/placeholder.png}" alt="Product image placeholder" fetchpriority="high" decoding="async"/></div>
         <div class="spec-card" th:if="${not #lists.isEmpty(product.documentsList)}">
           <h2>Documents</h2>
           <ul class="doc-list">
@@ -70,7 +71,7 @@
         <!-- One row per point, so the description reads as a structured
              block rather than a single run of prose. -->
         <div class="spec-card" th:if="${not #lists.isEmpty(product.descriptionLines)}">
-          <h2>Description</h2>
+          <h2>Product information</h2>
           <ul class="desc-list">
             <li th:each="l : ${product.descriptionLines}" th:text="${l}">point</li>
           </ul>
@@ -84,6 +85,10 @@
               <div class="val" th:text="${s.value}">value</div>
             </th:block>
           </div>
+        </div>
+        <div class="spec-card" th:if="${not #lists.isEmpty(product.featuresList)}">
+          <h2>Features</h2>
+          <ul class="desc-list"><li th:each="f : ${product.featuresList}" th:text="${f}"></li></ul>
         </div>
         <a href="/contact" class="btn btn-primary">Contact Us</a>
       </div>

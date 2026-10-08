@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import demo.model.Category;
 import demo.service.CategoryService;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
@@ -42,9 +43,16 @@ public class GlobalModelAttributes {
 
     /** Category tree for the mega menu — categories only, never products. */
     @ModelAttribute("navCategories")
-    public List<Category> navCategories() {
+    public List<Category> navCategories(HttpServletRequest request) {
+        String path = request.getServletPath();
+        if (request.getDispatcherType() == DispatcherType.ERROR
+                || path.equals("/error") || path.equals("/login")
+                || path.equals("/admin") || path.startsWith("/admin/")
+                || path.equals("/sitemap.xml")) {
+            return Collections.emptyList();
+        }
         try {
-            return categoryService.getRoots();
+            return categoryService.getNavigationRoots();
         } catch (Exception e) {
             return Collections.emptyList();
         }

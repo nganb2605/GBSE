@@ -3,9 +3,8 @@ package demo.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,32 +18,29 @@ import demo.repository.ProductRepository;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private ProductService self;
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-    }
-     @Autowired
-    public void setSelf(@Lazy ProductService self) {
-        this.self = self;
     }
 
     @Cacheable("products")
     @Transactional(readOnly = true)
     public List<Product> findAll() {
-        return productRepository.findAll(Sort.by("id").ascending());
+        return productRepository.findAll(Sort.by("id").ascending()).stream()
+            .filter(Product::isVisible).toList();
     }
 
+    @Cacheable("productSearch")
     @Transactional(readOnly = true)
     public List<ProductSearchItem> findAllForSearch() {
-        // 3. Sửa findAll() thành self.findAll() để đi qua Proxy
-        return self.findAll().stream()
-            .map(p -> new ProductSearchItem(p.getId(), p.getName(), p.getShortText(), p.getImage()))
+        return findAll().stream()
+            .map(p -> new ProductSearchItem(p.getId(), p.getName(), null,
+                "/images/placeholder.png", p.getName()))
             .toList();
     }
 
     @Transactional(readOnly = true)
     public Optional<Product> findById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
+        Optional<Product> product = productRepository.findById(id).filter(Product::isVisible);
         // Breadcrumbs walk the placement chain while the view renders.
         product.ifPresent(p -> p.getCategories().forEach(c -> {
             for (Category a = c.getParent(); a != null; a = a.getParent()) a.getName();

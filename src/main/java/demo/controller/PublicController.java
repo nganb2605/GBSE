@@ -1,6 +1,7 @@
 package demo.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import demo.dto.ContactFormDto;
 import demo.model.Product;
@@ -54,6 +57,20 @@ public class PublicController {
         model.addAttribute("roots", categoryService.getRoots());
         model.addAttribute("allProducts", productService.findAllForSearch());
         return "products";
+    }
+
+    @GetMapping(value = "/sitemap.xml", produces = MediaType.APPLICATION_XML_VALUE)
+    @ResponseBody
+    public String sitemap() {
+        String base = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+            .append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+        for (String path : new String[] {"/", "/about", "/products", "/projects", "/news", "/contact"}) {
+            xml.append("<url><loc>").append(base).append(path).append("</loc></url>");
+        }
+        productService.findAll().forEach(p -> xml.append("<url><loc>")
+            .append(base).append("/products/").append(p.getId()).append("</loc></url>"));
+        return xml.append("</urlset>").toString();
     }
 
     @GetMapping("/products/{id}")

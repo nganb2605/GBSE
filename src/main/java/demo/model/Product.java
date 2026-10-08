@@ -77,11 +77,19 @@ public class Product {
     @Column(columnDefinition = "text")
     private String documents;
 
+    @Column(nullable = false)
+    private boolean visible = true;
+
     // ── Transient helpers ────────────────────────────────────────────────────
 
     @Transient
     public List<String> getApplicationsList() {
         return parseStringList(applications);
+    }
+
+    @Transient
+    public List<String> getFeaturesList() {
+        return parseStringList(features);
     }
 
     /**
@@ -134,6 +142,25 @@ public class Product {
     @Transient
     public Category getPrimaryCategory() {
         return (categories == null || categories.isEmpty()) ? null : categories.get(0);
+    }
+
+    @Transient
+    public String getSearchText() {
+        StringBuilder value = new StringBuilder();
+        if (name != null) value.append(name).append(' ');
+        if (shortText != null) value.append(shortText).append(' ');
+        getSpecsList().stream()
+            .filter(s -> s.label != null && (s.label.equalsIgnoreCase("model") || s.label.equalsIgnoreCase("models")))
+            .filter(s -> s.value != null)
+            .forEach(s -> value.append(s.value).append(' '));
+        getDocumentsList().forEach(d -> {
+            if (d.label != null) value.append(d.label).append(' ');
+        });
+        if (categories != null) categories.stream().filter(Category::isVisible).forEach(c -> {
+            c.getAncestors().stream().filter(Category::isVisible).forEach(a -> value.append(a.getName()).append(' '));
+            value.append(c.getName()).append(' ');
+        });
+        return value.toString();
     }
 
     private List<String> parseStringList(String json) {
@@ -194,4 +221,7 @@ public class Product {
 
     public String getDocuments() { return documents; }
     public void setDocuments(String documents) { this.documents = documents; }
+
+    public boolean isVisible() { return visible; }
+    public void setVisible(boolean visible) { this.visible = visible; }
 }

@@ -41,22 +41,16 @@
      without children carries nothing at all, so a leaf opens no column and
      reserves no space.
 
-     The cascade stops at level 3. Every range except Automatic Control Valve
-     is fully covered by three levels, and three 236px columns are also what
-     fits to the right of the centred "Products" link at 1280px — a fourth
-     would run off-screen there. The deeper categories that only Automatic
-     Control Valve has, under "1. Pressure Control Series" and "6. Additional
-     Products", are reached from the catalogue page the level-3 links land
-     on. Raise the two `level < 3` tests together to go deeper. -->
+     All visible category levels are rendered so the menu follows the tree. -->
 <div th:fragment="meganode(cats, level)" class="mega-list">
   <div class="mega-row" th:each="c : ${cats}">
     <a class="mega-item"
        th:href="${level == 1} ? |/products#range-${c.slug}| : |/products#cat-${c.slug}|">
       <span th:text="${c.name}">Category</span>
-      <span class="mega-arr" th:if="${!c.leaf and level < 3}" aria-hidden="true">›</span>
+      <span class="mega-arr" th:if="${!#lists.isEmpty(c.visibleChildren)}" aria-hidden="true">›</span>
     </a>
-    <div class="mega-sublist" th:if="${!c.leaf and level < 3}">
-      <div th:replace="~{fragments/layout :: meganode(${c.children}, ${level} + 1)}"></div>
+    <div class="mega-sublist" th:if="${!#lists.isEmpty(c.visibleChildren)}">
+      <div th:replace="~{fragments/layout :: meganode(${c.visibleChildren}, ${level} + 1)}"></div>
     </div>
   </div>
 </div>
@@ -94,6 +88,12 @@
       <span></span><span></span><span></span>
     </button>
   </div>
+  <div th:fragment="mobilecat(cats)" class="mob-sub">
+    <div th:each="c : ${cats}">
+      <a class="mob-sub-link" th:href="|/products#cat-${c.slug}|" th:text="${c.name}">Category</a>
+      <div th:if="${!#lists.isEmpty(c.visibleChildren)}" th:replace="~{fragments/layout :: mobilecat(${c.visibleChildren})}"></div>
+    </div>
+  </div>
   <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <!-- Products accordion -->
     <div class="mob-prod-acc">
@@ -105,15 +105,12 @@
         <div class="mob-range" th:each="r : ${navCategories}">
           <div class="mob-range-row">
             <a class="mob-prod-link" th:href="|/products#range-${r.slug}|" th:text="${r.name}">Range</a>
-            <button type="button" class="mob-sub-toggle" th:if="${!r.leaf}" aria-expanded="false"
+            <button type="button" class="mob-sub-toggle" th:if="${!#lists.isEmpty(r.visibleChildren)}" aria-expanded="false"
                     th:attr="aria-label='Show ' + ${r.name} + ' categories'">
               <span class="mob-acc-caret" aria-hidden="true">▾</span>
             </button>
           </div>
-          <div class="mob-sub" th:if="${!r.leaf}">
-            <a class="mob-sub-link" th:each="c : ${r.children}"
-               th:href="|/products#cat-${c.slug}|" th:text="${c.name}">Category</a>
-          </div>
+          <div th:if="${!#lists.isEmpty(r.visibleChildren)}" th:replace="~{fragments/layout :: mobilecat(${r.visibleChildren})}"></div>
         </div>
       </div>
     </div>

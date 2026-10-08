@@ -1,7 +1,11 @@
 package demo.model;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,14 +25,15 @@ import jakarta.persistence.Transient;
  * A node in the catalogue tree. Roots (parent == null) are the product
  * ranges; every other node is a child category of arbitrary depth.
  *
- * The tree is navigation only — it drives the mega menu and the grouping on
- * the catalogue page. A category has no page of its own, so it carries no
- * editorial content; the description/specs/documents columns V16 added are
- * empty and unmapped (see V17).
+ * The tree drives navigation and catalogue grouping. Categories can also show
+ * introductions, applications, technical specs and documents directly on the
+ * catalogue page; they do not have separate detail pages.
  */
 @Entity
 @Table(name = "category")
 public class Category {
+
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +60,24 @@ public class Category {
 
     @Column(name = "sort_order")
     private int sortOrder;
+
+    @Column(columnDefinition = "text")
+    private String description;
+
+    @Column(columnDefinition = "text")
+    private String applications;
+
+    @Column(columnDefinition = "text")
+    private String specs;
+
+    @Column(columnDefinition = "text")
+    private String documents;
+
+    @Column(name = "image_path", columnDefinition = "varchar(255)")
+    private String imagePath;
+
+    @Column(nullable = false)
+    private boolean visible = true;
 
     // ── Transient helpers ────────────────────────────────────────────────────
 
@@ -83,9 +106,48 @@ public class Category {
 
     public List<Category> getChildren() { return children; }
     public void setChildren(List<Category> children) { this.children = children; }
+    @Transient
+    public List<Category> getVisibleChildren() {
+        return children.stream().filter(Category::isVisible).toList();
+    }
+    @Transient
+    public List<Category> getVisibleProductChildren() {
+        return getVisibleChildren().stream()
+            .filter(child -> !child.getVisibleProducts().isEmpty()).toList();
+    }
+    @Transient
+    public List<Category> getVisibleGroupChildren() {
+        return getVisibleChildren().stream()
+            .filter(child -> child.getVisibleProducts().isEmpty()).toList();
+    }
 
     public List<Product> getProducts() { return products; }
     public void setProducts(List<Product> products) { this.products = products; }
+    @Transient
+    public List<Product> getVisibleProducts() {
+        return products.stream().filter(Product::isVisible).toList();
+    }
+
+    @Transient
+    public List<String> getApplicationsList() {
+        if (applications == null || applications.isBlank()) return Collections.emptyList();
+        try { return mapper.readValue(applications, new TypeReference<List<String>>() {}); }
+        catch (Exception e) { return Collections.emptyList(); }
+    }
+
+    @Transient
+    public List<Product.SpecEntry> getSpecsList() {
+        if (specs == null || specs.isBlank()) return Collections.emptyList();
+        try { return mapper.readValue(specs, new TypeReference<List<Product.SpecEntry>>() {}); }
+        catch (Exception e) { return Collections.emptyList(); }
+    }
+
+    @Transient
+    public List<Product.DocEntry> getDocumentsList() {
+        if (documents == null || documents.isBlank()) return Collections.emptyList();
+        try { return mapper.readValue(documents, new TypeReference<List<Product.DocEntry>>() {}); }
+        catch (Exception e) { return Collections.emptyList(); }
+    }
 
     public String getSlug() { return slug; }
     public void setSlug(String slug) { this.slug = slug; }
@@ -95,4 +157,17 @@ public class Category {
 
     public int getSortOrder() { return sortOrder; }
     public void setSortOrder(int sortOrder) { this.sortOrder = sortOrder; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public String getApplications() { return applications; }
+    public void setApplications(String applications) { this.applications = applications; }
+    public String getSpecs() { return specs; }
+    public void setSpecs(String specs) { this.specs = specs; }
+    public String getDocuments() { return documents; }
+    public void setDocuments(String documents) { this.documents = documents; }
+    public String getImagePath() { return imagePath; }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+    public boolean isVisible() { return visible; }
+    public void setVisible(boolean visible) { this.visible = visible; }
 }

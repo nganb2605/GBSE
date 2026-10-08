@@ -1,6 +1,7 @@
 package demo.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,9 +49,25 @@ class ProductServiceTest {
 
         assertEquals(1, items.size());
         assertEquals("N300 - Check Valve", items.get(0).name());
-        assertEquals("N300 - Check Valve blurb", items.get(0).shortText());
+        assertNull(items.get(0).shortText());
+        assertEquals("N300 - Check Valve", items.get(0).searchText());
         // No image set, so the shared placeholder stands in.
         assertEquals("/images/placeholder.png", items.get(0).image());
+    }
+
+    @Test
+    void searchText_includesModelAndAncestorCategoryButNotHiddenCategories() {
+        Category root = category("metering", "Metering and Measuring");
+        Category water = category("water-meter", "Water Meter");
+        water.setParent(root);
+        Category hidden = category("old", "Retired Series");
+        hidden.setVisible(false);
+        Product meter = product("Water meter DN15-20 single jet", water, hidden);
+        meter.setSpecs("[{\"label\":\"Model\",\"value\":\"GSD8-RFM\"}]");
+
+        assertTrue(meter.getSearchText().contains("GSD8-RFM"));
+        assertTrue(meter.getSearchText().contains("Metering and Measuring"));
+        assertFalse(meter.getSearchText().contains("Retired Series"));
     }
 
     @Test

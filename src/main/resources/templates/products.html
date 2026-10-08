@@ -49,14 +49,8 @@
       </nav>
 
       <div class="range-list">
-      <div class="range open" th:each="r,it : ${roots}" th:id="|range-${r.slug}|">
-        <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
-          <h3 th:data-n="${it.count}" th:text="${r.name}">Range</h3>
-          <span class="chevron"></span>
-        </button>
-        <div class="range-body">
-          <div th:replace="~{fragments/catalogue :: catnode(${r}, 0)}"></div>
-        </div>
+      <div class="range" th:each="r,it : ${roots}" th:id="|range-${r.slug}|">
+        <div th:replace="~{fragments/catalogue :: catnode(${r}, 0)}"></div>
       </div>
       </div>
 
@@ -73,7 +67,7 @@
   function searchAll(q){
     q = (q||'').trim().toLowerCase();
     if(!q) return [];
-    return ALL.filter(p => (p.name + ' ' + p.shortText).toLowerCase().includes(q)).slice(0,6);
+    return ALL.filter(p => p.searchText.toLowerCase().includes(q)).slice(0,6);
   }
 
   function esc(str) {
@@ -88,10 +82,9 @@
     // Never use template literals with untrusted data directly in innerHTML.
     sug.innerHTML = items.map(p =>
       '<a href="/products/' + p.id + '">'
-      + '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '"/>'
+      + '<img src="/images/placeholder.png" alt="Product image placeholder"/>'
       + '<div class="sug-text">'
       + '<div class="name">' + esc(p.name) + '</div>'
-      + '<div class="short">' + esc(p.shortText) + '</div>'
       + '</div>'
       + '</a>'
     ).join('');
@@ -101,15 +94,12 @@
   function filterCards(q){
     q = (q||'').trim().toLowerCase();
     document.querySelectorAll('.prod-card').forEach(c => {
-      const t = (c.dataset.name + ' ' + c.dataset.short).toLowerCase();
+      const t = c.dataset.search.toLowerCase();
       c.style.display = !q || t.includes(q) ? '' : 'none';
     });
-    // Hide a child-category block once every card inside it is filtered out,
-    // so its heading never sits above an empty grid.
-    document.querySelectorAll('.subcat').forEach(s => {
-      const anyVisible = Array.from(s.querySelectorAll('.prod-card'))
+    document.querySelectorAll('.catalogue-group').forEach(group => {
+      if (q) group.open = Array.from(group.querySelectorAll('.prod-card'))
         .some(c => c.style.display !== 'none');
-      s.style.display = anyVisible ? '' : 'none';
     });
   }
 
@@ -118,14 +108,30 @@
   input.addEventListener('blur', () => setTimeout(()=>sug.classList.remove('open'),150));
 </script>
 <script>
-  // Range index → open target range + smooth-scroll
+  // Open all ancestor groups for range and breadcrumb links.
+  function revealCatalogueTarget(target) {
+    if (!target) return;
+    let parent = target.matches('.range')
+      ? target.querySelector(':scope > .catalogue-node')
+      : target.closest('.catalogue-node');
+    while (parent) {
+      const group = parent.querySelector(':scope > .catalogue-group');
+      if (group) group.open = true;
+      parent = parent.parentElement.closest('.catalogue-node');
+    }
+  }
+  if (location.hash) {
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    revealCatalogueTarget(target);
+    if (target) requestAnimationFrame(() => target.scrollIntoView());
+  }
   document.querySelectorAll('.cat-index-link').forEach(function (link) {
     link.addEventListener('click', function (e) {
       var id = link.getAttribute('href').slice(1);
       var range = document.getElementById(id);
       if (!range) return;
       e.preventDefault();
-      range.classList.add('open');
+      revealCatalogueTarget(range);
       range.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
