@@ -10,15 +10,16 @@
 <div th:fragment="catnode(cat, depth)" class="catalogue-node"
      th:classappend="|catalogue-depth-${depth}|" th:id="|cat-${cat.slug}|"
      th:style="|--catalogue-indent:${depth * 24}px|">
-  <details class="catalogue-group" th:if="${#lists.isEmpty(cat.visibleProducts)}">
-    <summary><span th:text="${cat.name}">Group</span><span class="catalogue-chevron" aria-hidden="true"></span></summary>
+  <section class="catalogue-group" th:if="${#lists.isEmpty(cat.visibleProducts)}">
+    <h2 class="catalogue-heading" th:text="${cat.name}">Group</h2>
     <div class="catalogue-children">
       <div class="product-grid" th:if="${!#lists.isEmpty(cat.visibleProductChildren)}">
         <th:block th:each="child : ${cat.visibleProductChildren}">
           <a class="prod-card" th:each="p : ${child.visibleProducts}"
              th:id="|cat-${child.slug}|" th:href="@{'/products/' + ${p.id}}" th:data-search="${p.name}">
-            <div class="pimg"><img th:src="@{/images/placeholder.png}" alt="Product image placeholder" loading="lazy" decoding="async"></div>
+            <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}" loading="lazy" decoding="async"></div>
             <div class="pbody"><h4 th:text="${p.name}">Product</h4></div>
+            <div class="pfooter"><span>View product</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           </a>
         </th:block>
       </div>
@@ -26,14 +27,18 @@
         <div th:replace="~{fragments/catalogue :: catnode(${child}, ${depth} + 1)}"></div>
       </th:block>
     </div>
-  </details>
-  <div class="product-grid" th:unless="${#lists.isEmpty(cat.visibleProducts)}">
-    <a class="prod-card" th:each="p : ${cat.visibleProducts}"
-       th:href="@{'/products/' + ${p.id}}" th:data-search="${p.name}">
-      <div class="pimg"><img th:src="@{/images/placeholder.png}" alt="Product image placeholder" loading="lazy" decoding="async"></div>
-      <div class="pbody"><h4 th:text="${p.name}">Product</h4></div>
-    </a>
-  </div>
+  </section>
+  <section class="catalogue-group" th:unless="${#lists.isEmpty(cat.visibleProducts)}">
+    <h2 class="catalogue-heading" th:text="${cat.name}">Group</h2>
+    <div class="product-grid">
+      <a class="prod-card" th:each="p : ${cat.visibleProducts}"
+         th:href="@{'/products/' + ${p.id}}" th:data-search="${p.name}">
+        <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}" loading="lazy" decoding="async"></div>
+        <div class="pbody"><h4 th:text="${p.name}">Product</h4></div>
+        <div class="pfooter"><span>View product</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </a>
+    </div>
+  </section>
 </div>
 
 </body>

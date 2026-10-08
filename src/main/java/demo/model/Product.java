@@ -106,6 +106,14 @@ public class Product {
             .toList();
     }
 
+    /** Customer-facing description rows, excluding the brand-name field. */
+    @Transient
+    public List<String> getProductInformationLines() {
+        return getDescriptionLines().stream()
+            .filter(line -> !line.matches("(?i)^brand\\s+name\\b.*"))
+            .toList();
+    }
+
     @Transient
     public List<SpecEntry> getSpecsList() {
         if (specs == null || specs.isBlank()) return Collections.emptyList();

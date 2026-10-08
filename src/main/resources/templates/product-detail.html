@@ -48,7 +48,10 @@
 <section class="section-pad-3 section-pb-5">
   <div class="container">
 
-    <h1 class="detail-title" th:text="${product.name}">Name</h1>
+    <div class="detail-header">
+      <h1 class="detail-title" th:text="${product.name}">Name</h1>
+      <a href="/contact" class="btn btn-primary">Contact Us</a>
+    </div>
     <div class="tags" th:if="${not #lists.isEmpty(product.applicationsList)}">
       <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
     </div>
@@ -70,10 +73,10 @@
       <div class="detail-info">
         <!-- One row per point, so the description reads as a structured
              block rather than a single run of prose. -->
-        <div class="spec-card" th:if="${not #lists.isEmpty(product.descriptionLines)}">
+        <div class="spec-card" th:if="${not #lists.isEmpty(product.productInformationLines)}">
           <h2>Product information</h2>
           <ul class="desc-list">
-            <li th:each="l : ${product.descriptionLines}" th:text="${l}">point</li>
+            <li th:each="l : ${product.productInformationLines}" th:text="${l}">point</li>
           </ul>
         </div>
         <!-- Ranges outside Automatic Control Valve still carry a spec table. -->
@@ -90,7 +93,6 @@
           <h2>Features</h2>
           <ul class="desc-list"><li th:each="f : ${product.featuresList}" th:text="${f}"></li></ul>
         </div>
-        <a href="/contact" class="btn btn-primary">Contact Us</a>
       </div>
     </div>
 

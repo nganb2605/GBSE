@@ -97,10 +97,7 @@
       const t = c.dataset.search.toLowerCase();
       c.style.display = !q || t.includes(q) ? '' : 'none';
     });
-    document.querySelectorAll('.catalogue-group').forEach(group => {
-      if (q) group.open = Array.from(group.querySelectorAll('.prod-card'))
-        .some(c => c.style.display !== 'none');
-    });
+
   }
 
   input.addEventListener('input', e => { renderSug(searchAll(e.target.value)); filterCards(e.target.value); });
@@ -108,21 +105,8 @@
   input.addEventListener('blur', () => setTimeout(()=>sug.classList.remove('open'),150));
 </script>
 <script>
-  // Open all ancestor groups for range and breadcrumb links.
-  function revealCatalogueTarget(target) {
-    if (!target) return;
-    let parent = target.matches('.range')
-      ? target.querySelector(':scope > .catalogue-node')
-      : target.closest('.catalogue-node');
-    while (parent) {
-      const group = parent.querySelector(':scope > .catalogue-group');
-      if (group) group.open = true;
-      parent = parent.parentElement.closest('.catalogue-node');
-    }
-  }
   if (location.hash) {
     const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    revealCatalogueTarget(target);
     if (target) requestAnimationFrame(() => target.scrollIntoView());
   }
   document.querySelectorAll('.cat-index-link').forEach(function (link) {
@@ -131,7 +115,6 @@
       var range = document.getElementById(id);
       if (!range) return;
       e.preventDefault();
-      revealCatalogueTarget(range);
       range.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
