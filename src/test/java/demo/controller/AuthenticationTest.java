@@ -29,6 +29,7 @@ import demo.service.CategoryService;
 import demo.service.CustomUserDetailsService;
 import demo.service.LoginAttemptService;
 import demo.service.ProductService;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @WebMvcTest(PublicController.class)
 @Import({SecurityConfig.class, CustomUserDetailsService.class})
@@ -36,12 +37,12 @@ class AuthenticationTest {
 
     @Autowired MockMvc mvc;
 
-    @MockBean ProductService productService;
-    @MockBean CategoryService categoryService;          // used by GlobalModelAttributes (nav)
-    @MockBean ContactRequestService contactRequestService;
-    @MockBean ContactRateLimiter contactRateLimiter;
-    @MockBean UserRepository userRepository;
-    @MockBean LoginAttemptService loginAttemptService;
+    @MockitoBean ProductService productService;
+    @MockitoBean CategoryService categoryService;          
+    @MockitoBean ContactRequestService contactRequestService;
+    @MockitoBean ContactRateLimiter contactRateLimiter;
+    @MockitoBean UserRepository userRepository;
+    @MockitoBean LoginAttemptService loginAttemptService;
 
     @BeforeEach
     void setUp() {

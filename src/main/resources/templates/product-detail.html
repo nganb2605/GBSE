@@ -60,7 +60,7 @@
          alongside, in the slot the specification table used to occupy. -->
     <div class="detail-hero">
       <div class="detail-media">
-        <div class="img-box"><img th:src="@{/images/placeholder.png}" alt="Product image placeholder" fetchpriority="high" decoding="async"/></div>
+        <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}" fetchpriority="high" decoding="async"/></div>
         <div class="spec-card" th:if="${not #lists.isEmpty(product.documentsList)}">
           <h2>Documents</h2>
           <ul class="doc-list">

@@ -34,7 +34,7 @@ public class ProductService {
     public List<ProductSearchItem> findAllForSearch() {
         return findAll().stream()
             .map(p -> new ProductSearchItem(p.getId(), p.getName(), null,
-                "/images/placeholder.png", p.getName()))
+                p.getImage(), p.getName()))
             .toList();
     }
 

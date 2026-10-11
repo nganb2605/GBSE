@@ -82,7 +82,7 @@
     // Never use template literals with untrusted data directly in innerHTML.
     sug.innerHTML = items.map(p =>
       '<a href="/products/' + p.id + '">'
-      + '<img src="/images/placeholder.png" alt="Product image placeholder"/>'
+      + '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '"/>'
       + '<div class="sug-text">'
       + '<div class="name">' + esc(p.name) + '</div>'
       + '</div>'

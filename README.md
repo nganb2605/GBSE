@@ -16,7 +16,7 @@ Dự án có Maven Wrapper nên không cần cài Maven riêng. Lần chạy đ�
 Nếu chưa có dự án trên máy:
 
 ```bash
-git clone --branch develop https://github.com/nganb2605/GBSE.git
+git clone --branch develop [https://github.com/nganb2605/GBSE.git](https://github.com/nganb2605/GBSE.git)
 cd GBSE
 ```
 
@@ -61,7 +61,7 @@ DB_USERNAME=postgres
 DB_PASSWORD=postgres
 
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=change-this-local-password
+ADMIN_PASSWORD=để là gì cũng được, khi chạy project lần đâu sẽ dùng mk này để log vào trang admin
 
 # Có thể để trống nếu chưa cần thử gửi email.
 RESEND_API_KEY=
@@ -90,29 +90,15 @@ Khi cần kiểm tra email, điền vào file cấu hình local:
 - `MAIL_FROM`: địa chỉ gửi được Resend cho phép sử dụng.
 - `MAIL_RECEIVER`: địa chỉ nhận email thử nghiệm.
 
-Nên tạo key riêng cho mỗi thành viên với quyền **Sending access**, và tách key production. Các key cùng team dùng chung hạn mức gửi. Nhận key qua kênh riêng, không đưa vào README hoặc commit. Xem [quyền API key](https://resend.com/changelog/new-api-key-permissions) và [Resend Teams](https://resend.com/blog/multiple-teams).
+Nên tạo key riêng cho mỗi thành viên với quyền **Sending access**, và tách key production. Các key cùng team dùng chung hạn mức gửi. Nhận key qua kênh riêng, không đưa vào README hoặc commit. Xem [quyền API key]([https://resend.com/changelog/new-api-key-permissions](https://resend.com/changelog/new-api-key-permissions)) và [Resend Teams]([https://resend.com/blog/multiple-teams](https://resend.com/blog/multiple-teams)).
 
 ## 5. Chạy ứng dụng
+Chạy lệnh này trtong terminal
 
-Chạy từ thư mục chứa `pom.xml`, với profile `local` để nạp file cấu hình vừa tạo.
-
-**Git Bash / macOS / Linux:**
-
-```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
-```
 
-**PowerShell trên Windows:**
+Chờ ứng dụng khởi động thành công rồi mở **http://localhost:8080**. 
 
-```powershell
-.\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=local"
-```
-
-Nếu chạy qua IDE, đặt active profile là `local` hoặc thêm program argument `--spring.profiles.active=local` vào cấu hình chạy ứng dụng.
-
-Chờ ứng dụng khởi động thành công rồi mở **http://localhost:8080**. Flyway sẽ thiết lập schema và dữ liệu có trong migration trên database local.
-
-Database mỗi máy là riêng biệt. Dữ liệu bạn đã nhập trên máy khác và các file trong thư mục `uploads/` không tự đồng bộ khi pull Git. Nếu cần giống dữ liệu của thành viên khác, trao đổi thêm bản export database local và các file upload cần thiết.
 
 ## 6. Làm việc cùng nhóm
 
@@ -133,17 +119,7 @@ git push -u origin feature/ten-chuc-nang
 
 Tạo Pull Request trên GitHub với branch đích là **develop** để nhóm review và merge. Thay `feature/ten-chuc-nang` bằng tên branch thực tế; có thể dùng tiền tố `fix/` cho sửa lỗi.
 
-Chạy kiểm thử khi thay đổi logic ứng dụng:
 
-```bash
-# Git Bash / macOS / Linux
-./mvnw test
-```
-
-```powershell
-# PowerShell
-.\mvnw.cmd test
-```
 
 ## 7. Dừng và chạy lại
 
@@ -151,16 +127,3 @@ Chạy kiểm thử khi thay đổi logic ứng dụng:
 - Dừng database: `docker compose down`. Dữ liệu vẫn được giữ trong Docker volume.
 - Lần làm việc tiếp theo: mở Docker Desktop, chạy `docker compose up -d`, rồi chạy ứng dụng với profile `local`.
 - Không thêm `-v` vào lệnh `docker compose down` nếu muốn giữ dữ liệu; tùy chọn này xóa volume database local.
-
-## 8. Lỗi thường gặp
-
-| Hiện tượng | Cách kiểm tra |
-| --- | --- |
-| Docker không kết nối được daemon | Mở Docker Desktop và chờ khởi động xong. |
-| Cổng `5432` đang được sử dụng | Kiểm tra PostgreSQL hoặc container khác đang chạy. Nếu đổi cổng host trong Compose, cập nhật cổng trong `DB_URL` tương ứng. |
-| Không tìm thấy `DB_URL` hoặc không kết nối được database | Kiểm tra file cấu hình, profile `local`, và `docker compose ps`. Xem log bằng `docker compose logs db`. |
-| Sai username/password database | Đối chiếu cấu hình local với Compose. Volume đã tồn tại giữ thông tin khởi tạo cũ; đổi biến trong Compose không tự đổi mật khẩu database đã tạo. |
-| Cổng `8080` đang được sử dụng | Dừng ứng dụng đang chiếm cổng hoặc thêm `PORT=8081` vào cấu hình local rồi mở cổng tương ứng. |
-| Không đăng nhập được admin sau khi đổi cấu hình | `ADMIN_PASSWORD` chỉ có tác dụng khi tạo tài khoản mới; tài khoản đã có giữ mật khẩu cũ. |
-| Không nhận được email | Kiểm tra ba biến email, quyền gửi của Resend và log ứng dụng. |
-| Java/Maven không chạy | Kiểm tra `java -version`, `JAVA_HOME`, và dùng đúng lệnh wrapper cho terminal đang sử dụng. |
